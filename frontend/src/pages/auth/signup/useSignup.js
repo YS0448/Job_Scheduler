@@ -25,7 +25,7 @@ export const useSignup = () => {
   const updateForm = (key, value) => {
     setForm((prev) => ({
       ...prev,
-      [key]: value.trim(),
+      [key]: value,
     }));
   };
 
@@ -41,7 +41,7 @@ export const useSignup = () => {
 
     try {
       showLoader();
-      await apiCall("POST", "/auth/send-otp", { email: form.email });
+      await apiCall("POST", "/auth/send-otp", { email: form.email.trim() });
       setStep("otp");
     } catch (err) {
       showToast("error", "Failed to send OTP");
@@ -64,9 +64,9 @@ export const useSignup = () => {
 
       // Step 2: Create user (only if OTP verified)
       await apiCall("POST", "/auth/signup", {
-        fullName: form.fullName,
-        email: form.email,
-        password: form.password,
+        fullName: form.fullName.trim(),
+        email: form.email.trim(),
+        password: form.password.trim(),
       });
 
       showToast("success", "Account created successfully!");
@@ -88,7 +88,7 @@ export const useSignup = () => {
   const handleResendOtp = async () => {
     try {
       showLoader();
-      await apiCall("POST", "/auth/send-otp", { email: form.email });
+      await apiCall("POST", "/auth/send-otp", { email: form.email.trim() });
     } catch (err) {
       alert("Failed to send OTP");
     } finally {
