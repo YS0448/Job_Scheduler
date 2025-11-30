@@ -5,7 +5,7 @@ const { executeQuery } = require("../../utils/db/dbUtils");
 const { getUTCDateTime } = require("../../utils/date/dateUtils");
 const generateToken = require("../../utils/auth/generateToken");
 const nodemailer = require('nodemailer');
-const { log } = require("console");
+const crypto = require('crypto');
 
 
 // Get current user details
@@ -197,10 +197,18 @@ const passwordReset = async (req, res, next) => {
   }
 };
 
+
+const generateOtp = () => {
+    const min = 100000;
+    const max = 1000000; 
+    const otp = crypto.randomInt(min, max);
+    return otp;
+};
+
 const sendOtp= async(req,res, next)=>{
   try{
     const {email} = req.body;
-    const otp = Math.floor(100000 + Math.random() * 900000);
+    const otp = generateOtp()
     const subject= "Your OTP";
     const text= `Your OTP ${otp}`
     // Send mail
