@@ -1,0 +1,24 @@
+# Dependencies
+/node_modules
+
+# Secrets and Environment
+.env
+.env.local
+.env.*.local
+
+# Build/Output
+/dist
+/build
+/out
+
+# Logs and Coverage
+npm-debug.log*
+yarn-debug.log*
+/logs
+/coverage
+
+# IDE and OS Files
+.DS_Store
+.vscode/
+.idea/
+```
