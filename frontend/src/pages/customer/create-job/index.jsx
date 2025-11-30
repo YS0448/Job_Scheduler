@@ -1,6 +1,6 @@
 import React from "react";
 import { useCreateJob } from "./useCreateJob";
-import { CreateJobForm } from "./createJobForm";
+import { CreateJobForm } from "./CreateJobForm";
 
 const CreateJob = () => {
   const { formData, setFormData, handleChange, handleSubmit } = useCreateJob();
