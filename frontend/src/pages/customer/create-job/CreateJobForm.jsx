@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 
 
-export const CreateJobForm = ({
+const CreateJobForm = ({
   formData,
   setFormData,
   handleChange,
@@ -70,3 +70,6 @@ export const CreateJobForm = ({
     </form>
   );
 };
+
+
+export default CreateJobForm
