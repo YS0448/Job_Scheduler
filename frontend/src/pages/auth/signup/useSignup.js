@@ -44,7 +44,7 @@ export const useSignup = () => {
       await apiCall("POST", "/auth/send-otp", { email: form.email.trim() });
       setStep("otp");
     } catch (err) {
-      showToast("error", "Failed to send OTP");
+      showToast("error", err?.message || "Failed to send OTP");
     } finally {
       hideLoader();
     }
@@ -79,7 +79,7 @@ export const useSignup = () => {
     
     } catch (err) {
       console.error(err);
-      showToast("error", err?.response?.data?.message || "Invalid OTP");
+      showToast("error", err?.message || "Invalid OTP");
     } finally {
       hideLoader();
     }
@@ -90,7 +90,7 @@ export const useSignup = () => {
       showLoader();
       await apiCall("POST", "/auth/send-otp", { email: form.email.trim() });
     } catch (err) {
-      alert("Failed to send OTP");
+      showToast('error', err?.message || "Failed to send OTP");
     } finally {
       hideLoader();
     }
