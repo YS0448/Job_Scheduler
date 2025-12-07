@@ -9,7 +9,7 @@ const HeroSection = () => {
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card className="rounded-2xl shadow">
+      <Card className="rounded-2xl shadow cursor-pointer" onClick={() => navigate("/view-jobs") }>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Total Jobs</CardTitle>
           <ClipboardList className="w-6 h-6 text-blue-600" />
