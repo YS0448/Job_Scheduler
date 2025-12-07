@@ -11,10 +11,9 @@ export default function EmailStep({ email, setEmail, onSendOtp }) {
         <Input
           id="email"
           type="email"
-          placeholder="Eg: name@email.com"
-          required
+          placeholder="Eg: name@email.com"          
           value={email}
-          onChange={(e) => setEmail(e.target.value.trim())}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-secondary">

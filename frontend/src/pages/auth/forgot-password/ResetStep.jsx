@@ -19,10 +19,9 @@ export default function ResetStep({ password, setPassword, confirmPassword, setC
           <InputGroupInput
             id="password"
             type={showPassword ? "text" : "password"}
-            placeholder="•••••••"
-            required
+            placeholder="•••••••"            
             value={password}
-            onChange={(e) => setPassword(e.target.value.trim())}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <InputGroupAddon align="inline-end">
             <button type="button" className="p-2" onClick={() => setShowPassword(!showPassword)}>
@@ -39,8 +38,7 @@ export default function ResetStep({ password, setPassword, confirmPassword, setC
           <InputGroupInput
             id="confirmPassword"
             type={showConfirm ? "text" : "password"}
-            placeholder="•••••••"
-            required
+            placeholder="•••••••"            
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />

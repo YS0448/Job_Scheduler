@@ -58,7 +58,7 @@ const JobTable = ({
       {
         header: "Actions",
         cell: ({ row }) =>
-          row.original.status === "Pending" ? (
+          row.original.status === "pending" ? (
             <div className="text-center">
               <button              
                 onClick={(e) =>{

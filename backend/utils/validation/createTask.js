@@ -2,17 +2,17 @@
     const errors = {};
 
     // Job Name
-    if (!data.jobName || data.jobName.trim() === "") {
+    if (!data.jobName || data.jobName?.trim() === "") {
         errors.jobName = "Job Name is required";
     }
 
     // Priority
-    if (!data.priority || data.priority.trim() === "") {
+    if (!data.priority || data.priority?.trim() === "") {
         errors.priority = "Priority is required";
     }
 
     // Description
-    if (!data.description || data.description.trim() === "") {
+    if (!data.description || data.description?.trim() === "") {
         errors.description = "Description is required";
     }
 

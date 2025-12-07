@@ -1,5 +1,6 @@
 require('dotenv').config();
 const mysql = require('mysql2');
+const logger = require('../utils/logger');
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
@@ -15,9 +16,9 @@ const dbConnection = pool.promise();
 (async()=>{
     try{
         await dbConnection.query('SELECT 1');
-        console.log('Connected to the database');
+        logger.info('✅ Connected to the database');
     } catch(error){
-        console.error('Error connecting to the database:', error);
+        logger.error('❌ Error connecting to the database: %o', error);
         process.exit(1);
     }
 })()

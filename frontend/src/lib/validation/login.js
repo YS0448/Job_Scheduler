@@ -2,7 +2,7 @@ export function validateLoginForm(form) {
   const errors = {};
 
   // Email
-  if (!form.email || form.email.trim() === "") {
+  if (!form.email || form.email?.trim() === "") {
     errors.email = "Email is required";
   } else {
     // simple email regex
@@ -13,7 +13,7 @@ export function validateLoginForm(form) {
   }
 
   // Password
-  if (!form.password || form.password.trim() === "") {
+  if (!form.password || form.password?.trim() === "") {
     errors.password = "Password is required";
   }
 

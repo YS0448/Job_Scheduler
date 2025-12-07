@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const generateToken = (user) => {
+const generateAuthToken  = (user) => {
   const payload = {
     user_id: user.user_id,
     full_name: user.full_name,
@@ -16,4 +16,8 @@ const generateToken = (user) => {
   return token;
 };
 
-module.exports = generateToken;
+const generateResetToken = (email) => {
+  return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '10m' });
+};
+
+module.exports = {generateAuthToken , generateResetToken};

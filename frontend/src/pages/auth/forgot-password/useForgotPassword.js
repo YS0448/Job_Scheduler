@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { apiCall } from "@/services/apiCall";
 import { useLoader } from "@/context/LoaderContext";
 import { showToast } from "@/components/common/AlertService";
-
-export const useForgotPassword= ()=> {
+import { trimArrayValues } from "@/lib/trimArrayValues";
+import { tr } from "date-fns/locale";
+export const useForgotPassword = () => {
   const navigator = useNavigate();
   const { showLoader, hideLoader } = useLoader();
 
@@ -13,12 +14,19 @@ export const useForgotPassword= ()=> {
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [resetToken, setResetToken] = useState("");
 
   const sendOtp = async (e) => {
     e.preventDefault();
+    // validation
+    if (!email) return showToast("error", "Email is required");
+    
     try {
       showLoader();
-      await apiCall("POST", "/auth/send-otp", { email });
+      const [trimmedEmail] = trimArrayValues([email]); 
+      setEmail(trimmedEmail); 
+      let payload = { email: trimmedEmail.toLowerCase() };
+      await apiCall("POST", "/auth/send-otp", payload);
       showToast("success", "OTP sent successfully!");
       setStep("otp");
     } catch (err) {
@@ -31,10 +39,23 @@ export const useForgotPassword= ()=> {
 
   const verifyOtp = async (e) => {
     e.preventDefault();
+    // validation
+    if (!email) return showToast("error", "Email is required");
+    if(!otp) return showToast("error", "OTP is required");
+    
     try {
-      showLoader();
-      await apiCall("POST", "/auth/verify-otp", { email, otp });
+      showLoader();      
+      const [trimmedEmail, trimmedOtp] = trimArrayValues([email, otp]);
+      setEmail(trimmedEmail);
+      setOtp(trimmedOtp);
+      
+      let payload = {
+        email: trimmedEmail?.toLowerCase() || "",
+        otp: trimmedOtp,
+      };
+      const res = await apiCall("POST", "/auth/verify-otp", payload);
       showToast("success", "OTP verified successfully!");
+      setResetToken(res.data?.resetToken);
       setStep("reset");
     } catch (err) {
       console.log(err);
@@ -51,10 +72,13 @@ export const useForgotPassword= ()=> {
 
     try {
       showLoader();
-      console.log('email111:', email);
-      console.log('password1111:', password);
-      await apiCall("POST", "/auth/reset-password", { email, newPassword: password });
-      showToast("success", "Password reset successfully!");
+      let payload = {
+        email: email?.toLowerCase() || "",
+        newPassword: password,
+        resetToken,
+      }
+      const res= await apiCall("POST", "/auth/reset-password", payload);
+      showToast("success", res.data.message || "Password reset successfully!");
       navigator("/login", { replace: true });
     } catch (err) {
       console.log(err);
@@ -79,4 +103,4 @@ export const useForgotPassword= ()=> {
     verifyOtp,
     resetPassword,
   };
-}
+};

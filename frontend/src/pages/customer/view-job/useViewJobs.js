@@ -45,10 +45,11 @@ export const useViewJobs = () => {
     try {
       showLoader();
 
-      await apiCall("POST", `/api/run-job/${jobId}`);
-      showToast("success", "Job run successfully!");
+      const res= await apiCall("POST", `/api/run-job/${jobId}`);
+      showToast("success", res.message || "Job run successfully!");
     } catch (err) {
       console.error("Failed to run job", err);
+      showToast("error", err.message || "Failed to run job");
     } finally {
       hideLoader();
     }
@@ -67,6 +68,11 @@ export const useViewJobs = () => {
           : job
       )
     );
+    // Show toast on webhook failure
+    if (updatedJob.status === "pending" && updatedJob.error) {
+      showToast("error", "Webhook failed! Job moved back to pending.");
+    }
+
   });
 
   return {

@@ -3,11 +3,12 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const { executeQuery } = require("../../utils/db/dbUtils");
 const { getUTCDateTime } = require("../../utils/date/dateUtils");
-const generateToken = require("../../utils/auth/generateToken");
+const {generateAuthToken, generateResetToken } = require("../../utils/auth/generateToken");
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-
-
+const { validateResetPassword } = require("../../utils/validation/resetPassword");
+const { trimArrayValues } = require("../../utils/trimArrayValues");
+const jwt  = require("jsonwebtoken");
 // Get current user details
 const getCurrentUser = async (req, res, next) => {
   try {
@@ -30,7 +31,9 @@ const getCurrentUser = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+    [email]= trimArrayValues([email]);
+    email=email.toLowerCase();
     const findUserQuery =
       "SELECT user_id, email, full_name, password, role, status FROM users WHERE email = ?";
     const user = await executeQuery(findUserQuery, [email]);
@@ -60,7 +63,7 @@ const login = async (req, res, next) => {
       user[0].user_id,
     ]);
 
-    const token = generateToken(user[0]);
+    const token = generateAuthToken(user[0]);
 
     res.status(200).json({
       message: "Login successful",
@@ -121,8 +124,10 @@ const sendEmail = async (to, subject, text) => {
 
 const verifyOtp = async (req, res, next) => {
   try {
-    const { email, otp } = req.body;
-
+    let { email, otp } = req.body;
+    email=email.toLowerCase();
+    [email]= trimArrayValues([email]);
+    email=email.toLowerCase();  
     const checkOtpQuery = "SELECT * FROM manage_otp WHERE created_by = ?";
     const checkOtp = await executeQuery(checkOtpQuery, [email]);
 
@@ -133,8 +138,9 @@ const verifyOtp = async (req, res, next) => {
     // Delete OTP after successful verification
     const deleteOtpQuery = "DELETE FROM manage_otp WHERE created_by = ? AND otp = ?";
     await executeQuery(deleteOtpQuery, [email, otp]);
+    const resetToken = generateResetToken(email);
 
-    res.status(200).json({ message: "OTP verified successfully" });
+    res.status(200).json({ message: "OTP verified successfully", resetToken });
   } catch (error) {
     console.error("Error verifying OTP:", error);
     next(error)
@@ -177,12 +183,16 @@ const createUser = async (req, res, next) => {
 
 const passwordReset = async (req, res, next) => {
   try {
-    const { email, newPassword } = req.body;
-    
-    if (!email || !newPassword) {
-      return res.status(400).json({ message: "Email and new password are required" });
+    const { email, newPassword, resetToken } = req.body;
+    // Validation
+    validateResetPassword(req.body);
+
+    // Verify reset token
+    const decodedToken = jwt.verify(resetToken, process.env.JWT_SECRET);
+    if (decodedToken.email !== email) {
+      return res.status(400).json({ message: "Invalid reset token" });
     }
-    
+
     // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
@@ -190,7 +200,7 @@ const passwordReset = async (req, res, next) => {
     const updateQuery = "UPDATE users SET password = ? WHERE email = ?";
     await executeQuery(updateQuery, [hashedPassword, email]);
 
-    res.status(200).json({ message: "Password reset successfully" });
+    res.status(200).json({ message: "Password reset successfully!" });
   } catch (error) {
     console.error("Error resetting password:", error);
     next(error);

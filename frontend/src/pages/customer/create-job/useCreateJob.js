@@ -4,6 +4,7 @@ import { useLoader } from "@/context/LoaderContext";
 import { showToast } from "@/components/common/AlertService";
 // validation
 import { validateCreateJob } from "@/lib/validation/create-job";
+import { trimArrayValues } from "@/lib/trimArrayValues";
 
 export const useCreateJob = () => {
 
@@ -18,22 +19,33 @@ export const useCreateJob = () => {
 
 
   const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value.trim() }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
+
+    [jobName, priority, description]=trimArrayValues(
+      [ formData.jobName, 
+        formData.priority, 
+        formData.description
+      ]
+    );
+    const payload = { jobName, priority, description };
+
+
     // validation
-    const errors = validateCreateJob(formData);
+    const errors = validateCreateJob(payload);
     if (Object.keys(errors).length > 0) {
         showToast("error", Object.values(errors)[0]);
       return;
     }
 
     try{
+
         showLoader();
-        apiCall("POST", "/api/jobs", formData);
+        apiCall("POST", "/api/jobs", payload);
         showToast("success", "Job created successfully!");
         // Reset form
         setFormData(initialFormData);

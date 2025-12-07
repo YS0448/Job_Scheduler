@@ -3,15 +3,21 @@ import { useState, useEffect } from "react";
 import { apiCall } from "@/services/apiCall";
 import { Button } from "@/components/ui/button";
 import { formatDateTime } from "@/lib/formatDate";
+import { useLoader } from "@/context/LoaderContext";
+import { fi } from "date-fns/locale";
 const Profile = () => {
   const [user, setUser] = useState({});
+  const { showLoader, hideLoader } = useLoader();
 
   const fetchUser = async () => {
     try {
+      showLoader();
       const response = await apiCall("GET", "/auth/me");
       setUser(response.data);
     } catch (error) {
       console.error("Error fetching user:", error);
+    }finally {
+      hideLoader();
     }
   };
 
@@ -28,13 +34,6 @@ const Profile = () => {
       .toUpperCase();
   };
 
-  if (!user.full_name) {
-    return (
-      <div className="min-h-screen flex justify-center items-center">
-        <p>Loading...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center items-start p-6">
