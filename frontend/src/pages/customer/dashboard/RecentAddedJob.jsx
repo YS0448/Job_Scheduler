@@ -64,7 +64,7 @@ const RecentAddedJob = () => {
                   <td className={styles.td}>
                     <span
                       className={`${styles.statusBase} ${
-                        job.status === "Completed"
+                        job.status === "completed"
                           ? styles.statusCompleted
                           : styles.statusPending
                       }`}
