@@ -2,14 +2,20 @@
 import LoginForm from "./LoginForm";
 import { useLogin } from "./useLogin";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const { form, updateForm, handleLogin } = useLogin();
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-muted px-4">
-      <Card className="w-full max-w-sm shadow-md">
+      
+      <Button variant="link" className="absolute left-4 top-4" asChild>
+        <Link to="/" className="cursor-pointer border-transparent"> Back to Home </Link>
+      </Button>      
 
+      <Card className="w-full max-w-sm shadow-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
           <CardDescription className="text-center text-muted-foreground">

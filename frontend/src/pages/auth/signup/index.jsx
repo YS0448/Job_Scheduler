@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {apiCall} from "@/services/apiCall";
+import { Button } from "@/components/ui/button";
 // components
 import SignupForm from "./SignupForm";
 import OtpForm from "./OtpForm";
@@ -28,6 +29,11 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-muted">
+
+      <Button variant="link" className="absolute left-4 top-4" asChild>
+        <Link to="/" className="cursor-pointer border-transparent"> Back to Home </Link>
+      </Button>
+      
       <Card className="w-full max-w-sm shadow-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">

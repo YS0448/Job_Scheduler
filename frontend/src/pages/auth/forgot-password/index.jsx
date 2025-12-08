@@ -3,7 +3,8 @@ import EmailStep from "./EmailStep";
 import OtpStep from "./OtpStep";
 import ResetStep from "./ResetStep";
 import { useForgotPassword } from "./useForgotPassword";
-
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 export default function ForgotPassword() {
   const {
     step,
@@ -21,7 +22,12 @@ export default function ForgotPassword() {
   } = useForgotPassword();
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-muted px-4">
+    
+    <div className="min-h-screen w-full flex items-center justify-center bg-muted px-4">      
+      <Button variant="link" className="absolute left-4 top-4" asChild>
+        <Link to="/" className="cursor-pointer border-transparent"> Back to Home </Link>
+      </Button>
+
       <Card className="w-full max-w-sm shadow-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">
@@ -42,5 +48,6 @@ export default function ForgotPassword() {
         </CardContent>
       </Card>
     </div>
+    
   );
 }
