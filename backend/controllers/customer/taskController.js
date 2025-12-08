@@ -120,8 +120,6 @@ const runJob = async (req, res, next) => {
       status: "running",
     });
 
-    res.status(200).json({ message: "Job running successfully" });
-
     // Simulate processing (3s delay)
     setTimeout(async () => {
       const jobsQuery = "SELECT * FROM jobs WHERE job_id = ?";
@@ -170,6 +168,7 @@ const runJob = async (req, res, next) => {
           status: "pending",
           error: "Webhook failed",
         });
+        next(error);
       }
     }, 3000);
   } catch (error) {
