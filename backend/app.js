@@ -39,14 +39,14 @@ const io = new Server(httpServer, {
 global.io = io;
 
 io.on('connection', (socket) => {
-    logger.info('✅ Client connected: %s', socket.id);
+    logger.info(`✅ Client connected: ${socket.id}`);
 
     socket.on('disconnect', () => {
-        logger.info('❌ Client disconnected: %s', socket.id);
+        logger.info(`❌ Client disconnected: ${socket.id}`);
     });
 
     socket.on('error', (error) => {
-        logger.error('Socket error on client %s: %o', socket.id, error);
+        logger.error('Socket error on client', socket.id, error);
     });
 });
 
@@ -56,7 +56,7 @@ try {
     require('./cron_jobs/index');
     logger.info('✅ Cron jobs loaded successfully');
 } catch (error) {
-    logger.error('❌ Error loading cron jobs: %o', error);
+    logger.error('❌ Error loading cron jobs:', error);
 }
 
 // Express Middleware
@@ -81,8 +81,8 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 7800;
 httpServer.listen(PORT, '0.0.0.0', () => {
     logger.info('═══════════════════════════════════════');
-    logger.info(`🚀 Server is running on port %d', ${PORT}`);
+    logger.info(`🚀 Server is running on port ${PORT}`);
     logger.info('📡 Socket.IO ready');
-    logger.info(`🌐 CLIENT_URL: %s', ${process.env.CLIENT_URL}`);
+    logger.info(`🌐 CLIENT_URL: ${process.env.CLIENT_URL}`);
     logger.info('═══════════════════════════════════════');
 });

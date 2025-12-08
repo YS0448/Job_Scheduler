@@ -10,7 +10,7 @@ const otpCleanup = async () => {
       WHERE created_at < DATE_SUB(UTC_TIMESTAMP(), INTERVAL 5 MINUTE);
     `;
     const result = await executeQuery(deleteQuery);
-    logger.info('[OTP Cleanup] 🗑️ Deleted expired OTPs. Rows affected: %d', result.affectedRows || 0);
+    logger.info(`[OTP Cleanup] 🗑️ Deleted expired OTPs. Rows affected: ${result.affectedRows || 0}`);
   } catch (error) {
     logger.error('[OTP Cleanup] ❌ Error during OTP cleanup: %o', error);
   } finally {
