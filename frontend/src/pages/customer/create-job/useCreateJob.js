@@ -26,7 +26,7 @@ export const useCreateJob = () => {
     e.preventDefault();
     
 
-    [jobName, priority, description]=trimArrayValues(
+    const [jobName, priority, description]=trimArrayValues(
       [ formData.jobName, 
         formData.priority, 
         formData.description
